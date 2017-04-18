@@ -1,0 +1,17 @@
+---
+driver:
+  name: vagrant
+
+provisioner:
+  name: shell
+  data_path: .
+  script: test/fixtures/bootstrap.sh
+
+verifier:
+  ruby_bindir: <%= ENV['MY_RUBY_HOME'] || '/opt/sensu/embedded' %>/bin
+
+platforms:
+  - name: ubuntu-16.04
+
+suites:
+  - name: default
