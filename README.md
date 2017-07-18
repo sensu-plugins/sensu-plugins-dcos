@@ -35,6 +35,29 @@ check-dcos-metrics.rb -m 'network.in.errors' -d -f interface:docker0 -C 2 -W 1
 
 Run `check-dcos-me.rb -h` for all the options.
 
+#### Check configuration example:
+
+This is an example how to use this plugin to ship metrics to InfluxDB using the [sensu-extensions-influxdb](https://github.com/sensu-extensions/sensu-extensions-influxdb) extension:
+```
+{
+  "checks": {
+    "dcos-host-metrics": {
+      "type": "metric",
+      "command": "/opt/sensu/embedded/bin/metrics-dcos-host.rb",
+      "influxdb": {
+        "templates": {
+          "dcos\\..*\\.filesystem\\.": "source.type.measurement.field2.nil.nil.path*",
+          "dcos\\..*\\.network\\.": "source.type.measurement.field2.nil.nil.interface*",
+          "dcos\\.": "source.type.measurement.field*"
+        },
+        "tags": {
+          "group": "node"
+        }
+      }
+  }
+}
+```
+
 ### Host Health Check
 
 The `check-dcos-ping.rb` will return `OK` if the host reports itself as heathy or `CRITICAL` otherwize
