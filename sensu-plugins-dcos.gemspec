@@ -4,14 +4,14 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'date'
 require 'sensu-plugins-dcos'
 
-Gem::Specification.new do |s|
+Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.authors                = ['PTC and contributors']
   s.date                   = Date.today.to_s
   s.description            = 'This plugin provides native dcos-metrics instrumentation
                               for monitoring and metrics collection.'
   s.email                  = '<sensu-users@googlegroups.com>'
   s.executables            = Dir.glob('bin/**/*.rb').map { |file| File.basename(file) }
-  s.files                  = Dir.glob('{bin,lib}/**/*') + %w(LICENSE README.md CHANGELOG.md)
+  s.files                  = Dir.glob('{bin,lib}/**/*') + %w[LICENSE README.md CHANGELOG.md]
   s.homepage               = 'https://github.com/PTC-Global/sensu-plugins-dcos'
   s.license                = 'APACHE 2.0'
   s.metadata               = { 'maintainer'         => 'PTC',
@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake',                      '~> 10.0'
   s.add_development_dependency 'redcarpet',                 '~> 3.2'
   s.add_development_dependency 'rspec',                     '~> 3.1'
-  s.add_development_dependency 'rubocop',                   '~> 0.40.0'
+  s.add_development_dependency 'rubocop',                   '~> 0.49.0'
   s.add_development_dependency 'yard',                      '~> 0.8'
   s.add_development_dependency 'test-kitchen',              '~> 1.6'
   s.add_development_dependency 'kitchen-vagrant',           '~> 0.19'

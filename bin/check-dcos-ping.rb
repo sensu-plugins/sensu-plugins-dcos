@@ -57,11 +57,10 @@ class CheckDcosPing < Sensu::Plugin::Check::CLI
 
   def run
     value = get_data(config[:url])['ok']
-    message "OK = #{value}"
-    if value === true
-      ok
+    if value == true
+      ok 'PONG'
     else
-      critical
+      critical "ping returned: #{value}"
     end
   end
 end

@@ -117,17 +117,19 @@ class CheckDcosContainersApi < Sensu::Plugin::Check::CLI
       db = Daybreak::DB.new '/tmp/dcos-metrics.db', default: 0
     end
     containers = get_data(config[:url])
-    containers.each do |container|
-      v = get_value("#{config[:url]}/#{container}", config[:metric], config[:filter])
-      if config[:delta]
-        prev_value = db["#{container}_#{config[:metric]}"]
-        db.lock do
-          db["#{container}_#{config[:metric]}"] = v
+    unless containers.nil? || containers.empty?
+      containers.each do |container|
+        v = get_value("#{config[:url]}/#{container}", config[:metric], config[:filter])
+        if config[:delta]
+          prev_value = db["#{container}_#{config[:metric]}"]
+          db.lock do
+            db["#{container}_#{config[:metric]}"] = v
+          end
+          v -= prev_value
         end
-        v -= prev_value
+        data[container] = v
       end
-      data[container] = v
-    end unless containers.nil? || containers.empty?
+    end
     if config[:delta]
       db.flush
       db.compact
