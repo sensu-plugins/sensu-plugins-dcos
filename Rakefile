@@ -5,6 +5,7 @@ require 'rspec/core/rake_task'
 require 'rubocop/rake_task'
 require 'yard'
 require 'yard/rake/yardoc_task'
+require 'English'
 
 YARD::Rake::YardocTask.new do |t|
   OTHER_PATHS = %w[].freeze
@@ -26,7 +27,7 @@ end
 desc 'Test for binstubs'
 task :check_binstubs do
   unless Dir.glob('bin/**/*.rb').empty?
-    bin_list = Gem::Specification.load('sensu-plugins-skel.gemspec').executables
+    bin_list = Gem::Specification.load('sensu-plugins-dcos.gemspec').executables
     bin_list.each do |b|
       `which #{ b }`
       unless $CHILD_STATUS.success?

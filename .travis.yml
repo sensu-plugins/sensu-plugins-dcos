@@ -5,7 +5,6 @@ before_install: gem install bundler -v 1.15
 install:
 - bundle install
 rvm:
-- 2.0
 - 2.1
 - 2.2
 - 2.3.0
@@ -18,8 +17,8 @@ notifications:
     on_failure: always
 script:
 - bundle exec rake default
-- gem build sensu-plugins-skel.gemspec
-- gem install sensu-plugins-skel-*.gem
+- gem build sensu-plugins-dcos.gemspec
+- gem install sensu-plugins-dcos-*.gem
 deploy:
   provider: rubygems
   api_key:

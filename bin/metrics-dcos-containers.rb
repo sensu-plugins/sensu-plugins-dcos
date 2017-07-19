@@ -79,25 +79,30 @@ class DCOSMetrics < Sensu::Plugin::Metric::CLI::Graphite
 
   def run
     containers = get_data("http://#{config[:server]}:#{config[:port]}#{config[:uri]}")
-    containers.each do |container|
-      all_metrics = get_data("http://#{config[:server]}:#{config[:port]}#{config[:uri]}/#{container}")
-      if all_metrics.key?('datapoints')
-        all_metrics['datapoints'].each do |metric|
+    unless containers.nil? || containers.empty?
+      containers.each do |container|
+        all_metrics = get_data("http://#{config[:server]}:#{config[:port]}#{config[:uri]}/#{container}")
+        if all_metrics.key?('datapoints')
+          all_metrics['datapoints'].each do |metric|
+            metric['name'].tr!('/', '.')
+            metric['name'].squeeze!('.')
+            output([config[:scheme], container, metric['unit'], metric['name']].join('.'), metric['value'])
+          end
+        end
+        app_metrics = get_data("http://#{config[:server]}:#{config[:port]}#{config[:uri]}/#{container}/app")
+        next if app_metrics['datapoints'].nil?
+        app_metrics['datapoints'].each do |metric|
+          unless metric['tags'].nil?
+            metric['tags'].each do |k, v|
+              metric['name'] = [metric['name'], k, v].join('.')
+            end
+          end
           metric['name'].tr!('/', '.')
           metric['name'].squeeze!('.')
-          output([config[:scheme], container, metric['unit'], metric['name']].join('.'), metric['value'])
+          output([config[:scheme], container, 'app', metric['unit'], metric['name']].join('.'), metric['value'])
         end
       end
-      app_metrics = get_data("http://#{config[:server]}:#{config[:port]}#{config[:uri]}/#{container}/app")
-      app_metrics['datapoints'].each do |metric|
-        metric['tags'].each do |k, v|
-          metric['name'] = [metric['name'], k, v].join('.')
-        end unless metric['tags'].nil?
-        metric['name'].tr!('/', '.')
-        metric['name'].squeeze!('.')
-        output([config[:scheme], container, 'app', metric['unit'], metric['name']].join('.'), metric['value'])
-      end unless app_metrics['datapoints'].nil?
-    end unless containers.nil? || containers.empty?
+    end
     ok
   end
 end
