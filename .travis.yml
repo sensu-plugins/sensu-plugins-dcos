@@ -1,14 +1,15 @@
 language: ruby
-sudo: required
-dist: trusty
 cache:
 - bundler
+before_install: gem install bundler -v 1.15
 install:
 - bundle install
 rvm:
+- 2.0
 - 2.1
 - 2.2
-- 2.3
+- 2.3.0
+- 2.4.1
 notifications:
   email:
     recipients:
@@ -16,27 +17,16 @@ notifications:
     on_success: change
     on_failure: always
 script:
-  - rvm use --default $TRAVIS_RUB_VERSION
-  - echo 'export PATH="$PATH:/home/travis/.rvm/bin"' | sudo tee -a /etc/profile
-  - echo 'source /home/travis/.rvm/scripts/rvm' | sudo tee -a /etc/profile
-  - bundle exec rake default
-  - bundle exec kitchen test
-  - sudo chown -R travis:travis /home/travis/.rvm
-  - gem build sensu-plugins-dcos.gemspec
-  - gem install sensu-plugins-dcos-*.gem
+- bundle exec rake default
+- gem build sensu-plugins-skel.gemspec
+- gem install sensu-plugins-skel-*.gem
 deploy:
   provider: rubygems
   api_key:
-    secure: gEAG8w7v8luKjpTp1NvNQ3qMUoGpfsNWmBByhwXq+A/B2KeaLd5UnUSEFJIK2JkxLkTr1rIpiWxBQmuHKN+RReJm8nij0Awt+oHLKruWw3rOht+fnlXHlI67njbXwnmQPuG44SOX5tqesWzwMBd35dIrYNJyygvwSlDXIOQtHUA=
+    secure: PY0CkfyMfmyzQ6J4KQImZ5CTptFUkpYMv2UMullimjHchemJsNtwbFl8jdH+fCKMrMm6RV9keGad7wCQVykM7NaAgPHRbpgiV8ZFYjch7UiBUkxXo2VFaIY53ttlZszJIZZeFRIpmgX3QgDCM4O0Y6apeNHqtQrku6HFKmkBmBmDBKryi5kkgXs7UBOskWk6J5UnM4qzhVy5xnGKs2u/cr/Ls2D1EvI9ADWxpHDygW8vZIwL6daULNTAplRKzJQphDPiuccvQWRxmFE1g7iIhkoxZY3TIumR9dVRXP8xJ6pJ8KUskZIr4iV76gX9tTXEdsofCw7G6HbDwVfdL5FWnsBn9J7v1J7A+IKT0oRqioNMAXRTmjtRb7zgOB6VMDI2hh1x8lMQdPTfiUcoAo8tYEwzNJbn2PU68ufOpAs/gTHMqkixCIaOHwiSubDAa/JmPZmYP8k04sRy1aV3Rfl5IID0d381Ndg8Px/6zEHZMN6MKwmmayDkq14yKodwoPOmWn4D+uNtDgZ1Qcp5WZY8jnPCBF/yeoL+zbNUaF5Oi0Q32jET/kaElhVOAT4mAZPgDFzBAE2OAVlqYZNyaR0NSh0kt9vb1OdlKaZSokXiVrDbEHlwNQ8v4+HDNAS4i4vnakPXhhYGHqKMe/PFE1jEc0AT3h0AYgRV+vcahM0T00E=
   gem: sensu-plugins-dcos
   on:
     tags: true
     all_branches: true
-    rvm: 2.1
-    rvm: 2.2
-    rvm: 2.3
+    rvm: 2.4.1
     repo: sensu-plugins/sensu-plugins-dcos
-
-env:
-  global:
-    - KITCHEN_LOCAL_YAML=.kitchen.travis.yml
