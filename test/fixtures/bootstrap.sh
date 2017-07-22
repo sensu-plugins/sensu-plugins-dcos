@@ -10,7 +10,14 @@ source /etc/profile
 DATA_DIR=/tmp/kitchen/data
 RUBY_HOME=${MY_RUBY_HOME:-/opt/sensu/embedded}
 
-if [ "$RUBY_HOME" = "/opt/sensu/embedded" ] && [ ! -d $RUBY_HOME ]; then
+# Set the locale
+apt-get install locales
+locale-gen en_US.UTF-8
+export LANG="en_US.UTF-8"
+export LANGUAGE="en_US:en"
+export LC_ALL="en_US.UTF-8"
+
+if [[ "$RUBY_HOME" = "/opt/sensu/embedded" ]] && [[ ! -d $RUBY_HOME ]]; then
   wget -q http://repositories.sensuapp.org/apt/pubkey.gpg -O- | apt-key add -
   echo "deb http://repositories.sensuapp.org/apt sensu main" > /etc/apt/sources.list.d/sensu.list
   apt-get update
