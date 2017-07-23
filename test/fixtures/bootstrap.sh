@@ -127,3 +127,6 @@ service nginx restart
 cd $DATA_DIR
 SIGN_GEM=false $RUBY_HOME/bin/gem build sensu-plugins-dcos.gemspec
 $RUBY_HOME/bin/gem install sensu-plugins-dcos-*.gem
+
+echo $RUBY_HOME
+ls $RUBY_HOME/bin
