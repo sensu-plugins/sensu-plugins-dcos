@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 
@@ -13,7 +15,7 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.executables            = Dir.glob('bin/**/*.rb').map { |file| File.basename(file) }
   s.files                  = Dir.glob('{bin,lib}/**/*') + %w[LICENSE README.md CHANGELOG.md]
   s.homepage               = 'https://github.com/PTC-Global/sensu-plugins-dcos'
-  s.license                = 'APACHE 2.0'
+  s.license                = 'Apache-2.0'
   s.metadata               = { 'maintainer'         => 'PTC',
                                'development_status' => 'active',
                                'production_status'  => 'unstable - testing recommended',
@@ -43,6 +45,7 @@ Gem::Specification.new do |s| # rubocop:disable Metrics/BlockLength
   s.add_development_dependency 'rspec',                     '~> 3.1'
   s.add_development_dependency 'rubocop',                   '~> 0.49.0'
   s.add_development_dependency 'yard',                      '~> 0.8'
+  s.add_development_dependency 'serverspec',                '~> 2.36.1'
   s.add_development_dependency 'test-kitchen',              '~> 1.6'
   s.add_development_dependency 'kitchen-docker',            '~> 2.6'
   s.add_development_dependency 'kitchen-localhost',         '~> 0.3'

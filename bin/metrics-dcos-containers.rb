@@ -79,7 +79,7 @@ class DCOSMetrics < Sensu::Plugin::Metric::CLI::Graphite
 
   def run
     containers = get_data("http://#{config[:server]}:#{config[:port]}#{config[:uri]}")
-    unless containers.nil? || containers.empty?
+    unless containers.nil? || containers.empty? # rubocop:desable Style/MultilineIfModifier
       containers.each do |container|
         all_metrics = get_data("http://#{config[:server]}:#{config[:port]}#{config[:uri]}/#{container}")
         if all_metrics.key?('datapoints')
