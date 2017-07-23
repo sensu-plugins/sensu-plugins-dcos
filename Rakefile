@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bundler/gem_tasks'
 require 'github/markup'
 require 'redcarpet'
@@ -38,4 +40,4 @@ task :check_binstubs do
   end
 end
 
-task default: %i[spec make_bin_executable yard rubocop check_binstubs]
+task default: %i[make_bin_executable yard rubocop check_binstubs]

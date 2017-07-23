@@ -73,7 +73,7 @@ class CheckDcosComponentHealth < Sensu::Plugin::Check::CLI
     if config[:component]
       value = get_value(config[:url], config[:component], config[:filter], 'id', 'health', 'units')
       message "#{config[:component]} = #{value}"
-      if value == 0
+      if value.zero?
         ok
       else
         critical
@@ -85,7 +85,7 @@ class CheckDcosComponentHealth < Sensu::Plugin::Check::CLI
         failed += unit['health']
       end
       message "components.unhealthy = #{failed}"
-      if failed == 0
+      if failed.zero?
         ok
       else
         critical
