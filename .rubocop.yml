@@ -6,7 +6,7 @@ LineLength:
   Max: 160
 
 AbcSize:
-  Max: 220
+  Max: 100
 
 FileName:
   Enabled: false
@@ -27,10 +27,4 @@ RegexpLiteral:
   Enabled: false
 
 Style/Documentation:
-  Enabled: false
-
-Style/Next:
-  Enabled: false
-
-Style/CaseEquality:
   Enabled: false

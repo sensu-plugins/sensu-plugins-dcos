@@ -1,24 +1,25 @@
 #! /usr/bin/env ruby
-# frozen_string_literal: true
-
 #
-# check-dcos-ping
+# metric-dcos-system-health
 #
 # DESCRIPTION:
-#    This plugin checks the status of a DCOS host using the /ping entrypoint from the dcos-metrics API
+#    This plugin collects DC/OS system health status as metric exposed by the system/health/v1/[units|nodes] API endpoints
 #
 # OUTPUT:
-#    Plain text
+#    Metric data
 #
 # PLATFORMS:
 #    Linux
 #
 # DEPENDENCIES:
-#    gem: sensu-plugin
+#   gem: sensu-plugin
+#   gem: uri
+#   gem: net/http
+#   gem: socket
+#   gem: json
 #
 # USAGE:
-#    This example checks if the host is reporting himself as healthy
-#    check-dcos-ping.rb -u 'http://127.0.0.1:61001/system/v1/metrics/v0/ping'
+#   #YELLOW
 #
 # NOTES:
 #
@@ -42,28 +43,33 @@ require 'sensu-plugin/check/cli'
 require 'json'
 require 'net/http'
 require 'uri'
+require 'socket'
 require 'sensu-plugins-dcos'
 
-#
-# Check DCOS API
-#
-
-class CheckDcosPing < Sensu::Plugin::Check::CLI
+class DcosHealthMetrics < Sensu::Plugin::Metric::CLI::Graphite
   include Common
+
+  option :scheme,
+         description: 'Metric naming scheme',
+         short: '-s SCHEME',
+         long: '--scheme SCHEME',
+         default: "#{Socket.gethostname}.dcos.health"
 
   option :url,
          description: 'URL',
          short: '-u URL',
          long: '--url URL',
-         default: 'http://127.0.0.1:61001/system/v1/metrics/v0/ping'
+         default: 'http://127.0.0.1:1050/system/health/v1'
 
   def run
-    value = get_data(config[:url])['ok']
-    message "OK = #{value}"
-    if value == true
-      ok
-    else
-      critical
+    {'units': ['id'], 'nodes': ['role','host_ip']}.each do |endpoint,attributes|
+      failed = 0
+      url = "#{config['url']}/#{endpoint}"
+      resource = get_data(url)
+      resource[endpoint].each do |item|
+        path = attributes.map { |attr| item[attr].tr('.', '-') }.join('.')
+        output([config[:scheme], endpoint, path].join('.'), item['health'])
+      end
     end
   end
 end

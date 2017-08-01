@@ -16,7 +16,7 @@ mkmf.log
 .DS_Store
 *.gem
 .kitchen/
-
+.kitchen.list.yml
 #Intellij files
 *.iml
 *.idea

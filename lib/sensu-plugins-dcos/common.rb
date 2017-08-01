@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # LICENCE:
 #    PTC http://www.ptc.com/
 #    Copyright 2017 PTC Inc.
@@ -32,15 +34,15 @@ module Common
     critical 'Invalid JSON'
   end
 
-  def get_value(url, metric, filter)
+  def get_value(url, metric, filter, name_field = 'name', value_field = 'value', root_field = 'datapoints') # rubocop:disable Metrics/ParameterLists
     resource = get_data(url)
     return {} if resource.nil? || resource.empty?
     if filter
       filter = filter.split(':')
-      value = resource['datapoints'].select { |data| data['tags'] == { filter[0] => filter[1] } }
-      value.select { |data| data['name'] == metric }.first['value']
+      value = resource[root_field].select { |data| data['tags'] == { filter[0] => filter[1] } }
+      value.select { |data| data[name_field] == metric }.first[value_field]
     else
-      resource['datapoints'].select { |data| data['name'] == metric }.first['value']
+      resource[root_field].select { |data| data[name_field] == metric }.first[value_field]
     end
   end
 end

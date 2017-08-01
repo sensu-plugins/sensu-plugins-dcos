@@ -1,11 +1,9 @@
 #! /usr/bin/env ruby
-# frozen_string_literal: true
-
 #
-# check-dcos-ping
+# check-dcos-node-health
 #
 # DESCRIPTION:
-#    This plugin checks the status of a DCOS host using the /ping entrypoint from the dcos-metrics API
+#    This plugin checks the health of a DC/OS nodes exposed by the system/health/v1/nodes API endpoint
 #
 # OUTPUT:
 #    Plain text
@@ -17,8 +15,7 @@
 #    gem: sensu-plugin
 #
 # USAGE:
-#    This example checks if the host is reporting himself as healthy
-#    check-dcos-ping.rb -u 'http://127.0.0.1:61001/system/v1/metrics/v0/ping'
+#    check-dcos-node-health.rb -u 'http://127.0.0.1:1050/system/health/v1/nodes' -r [master|agent]
 #
 # NOTES:
 #
@@ -45,22 +42,39 @@ require 'uri'
 require 'sensu-plugins-dcos'
 
 #
-# Check DCOS API
+# Check DCOS System Health API
 #
 
-class CheckDcosPing < Sensu::Plugin::Check::CLI
+class CheckDcosNodeHealth < Sensu::Plugin::Check::CLI
   include Common
 
   option :url,
          description: 'URL',
          short: '-u URL',
          long: '--url URL',
-         default: 'http://127.0.0.1:61001/system/v1/metrics/v0/ping'
+         default: 'http://127.0.0.1:1050/system/health/v1/nodes'
+
+  option :role,
+         description: 'DC/OS Role',
+         short: '-r ROLE',
+         long: '--role ROLE',
+         default: nil
 
   def run
-    value = get_data(config[:url])['ok']
-    message "OK = #{value}"
-    if value == true
+    failed = 0
+    resource = get_data(config[:url])
+    if config[:role]
+      resource['nodes'].each do |node|
+        node['role'] == config[:role] && failed += node['health']
+      end
+      message "#{config[:role]}.nodes.unhealthy = #{failed}"
+    else
+      resource['nodes'].each do |node|
+        failed += node['health']
+      end
+      message "nodes.unhealthy = #{failed}"
+    end
+    if failed.zero?
       ok
     else
       critical

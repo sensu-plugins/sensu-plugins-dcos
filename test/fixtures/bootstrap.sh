@@ -6,22 +6,30 @@
 
 set -e
 
+apt-get install -y wget
+
 source /etc/profile
 DATA_DIR=/tmp/kitchen/data
-RUBY_HOME=${MY_RUBY_HOME:-/opt/sensu/embedded}
+RUBY_HOME=${MY_RUBY_HOME}
 
-if [ "$RUBY_HOME" = "/opt/sensu/embedded" ] && [ ! -d $RUBY_HOME ]; then
-  wget -q http://repositories.sensuapp.org/apt/pubkey.gpg -O- | apt-key add -
-  echo "deb http://repositories.sensuapp.org/apt sensu main" > /etc/apt/sources.list.d/sensu.list
-  apt-get update
-  apt-get install -y sensu
-else
-  apt-get update
-fi
+# Set the locale
+apt-get install -y locales
+locale-gen en_US.UTF-8
+export LANG="en_US.UTF-8"
+export LANGUAGE="en_US:en"
+export LC_ALL="en_US.UTF-8"
+
+# if [[ "$RUBY_HOME" = "/opt/sensu/embedded" ]] && [[ ! -d $RUBY_HOME ]]; then
+#   wget -q http://repositories.sensuapp.org/apt/pubkey.gpg -O- | apt-key add -
+#   echo "deb http://repositories.sensuapp.org/apt sensu main" > /etc/apt/sources.list.d/sensu.list
+#   apt-get update
+#   apt-get install -y sensu
+# else
+#   apt-get update
+# fi
 
 apt-get install -y nginx build-essential
 # service nginx status || service nginx start
-rm /etc/nginx/sites-enabled/default
 echo "
   server {
     listen 80;
@@ -99,10 +107,38 @@ echo "
       }
       return 200 '{\"datapoints\": [{\"name\": \"cpu.cores\",\"value\": 2,\"unit\": \"count\",\"timestamp\": \"2017-04-18T08:36:18.398311311Z\"},{\"name\": \"memory.free\",\"value\": 2721533952,\"unit\": \"bytes\",\"timestamp\": \"2017-04-18T08:36:18.399019053Z\"},{\"name\": \"network.in\",\"value\": 208,\"unit\": \"bytes\",\"timestamp\": \"2017-04-18T08:36:18.399308233Z\",\"tags\": {\"interface\": \"dummy0\"}},{\"name\": \"network.out\",\"value\": 0,\"unit\": \"bytes\",\"timestamp\": \"2017-04-18T08:36:18.399308233Z\",\"tags\": {\"interface\": \"dummy0\"}},{\"name\": \"network.in\",\"value\": 0,\"unit\": \"bytes\",\"timestamp\": \"2017-04-18T08:36:18.399308233Z\",\"tags\": {\"interface\": \"dummy1\"}},{\"name\": \"process.count\",\"value\": 208,\"unit\": \"count\",\"timestamp\": \"2017-04-18T08:36:18.415071848Z\"}],\"dimensions\": {\"mesos_id\": \"a1ac060c-82e2-4a28-bc94-c7efcbfb137d-S5\",\"cluster_id\": \"244883b9-7f5a-4886-a1f8-eb5093215b3f\",\"hostname\": \"dcos-agent\"}}';
     }
+
+    location /system/health/units {
+      limit_except GET {
+        deny all;
+      }
+      return 200 '{\"units\":[{\"id\":\"dcos-mesos-slave-public.service\",\"name\":\"Mesos Agent Public\",\"health\":0,\"description\":\"distributed systems kernel public agent\"},{\"id\":\"dcos-log-master.socket\",\"name\":\"DC/OS Log Socket\",\"health\":0,\"description\":\"socket for DC/OS Log service\"},{\"id\":\"dcos-metrics-master.socket\",\"name\":\"DC/OS Metrics Master Socket\",\"health\":0,\"description\":\"socket for DC/OS Metrics Master service\"},{\"id\":\"dcos-3dt.socket\",\"name\":\"DC/OS Diagnostics (3DT) Agent Socket\",\"health\":0,\"description\":\"socket for DC/OS Diagnostics Agent\"}]}';
+    }
+
+    location /system/health/units/fail {
+      limit_except GET {
+        deny all;
+      }
+      return 200 '{\"units\":[{\"id\":\"dcos-mesos-slave-public.service\",\"name\":\"Mesos Agent Public\",\"health\":1,\"description\":\"distributed systems kernel public agent\"},{\"id\":\"dcos-log-master.socket\",\"name\":\"DC/OS Log Socket\",\"health\":0,\"description\":\"socket for DC/OS Log service\"},{\"id\":\"dcos-metrics-master.socket\",\"name\":\"DC/OS Metrics Master Socket\",\"health\":0,\"description\":\"socket for DC/OS Metrics Master service\"},{\"id\":\"dcos-3dt.socket\",\"name\":\"DC/OS Diagnostics (3DT) Agent Socket\",\"health\":1,\"description\":\"socket for DC/OS Diagnostics Agent\"}]}';
+    }
+
+    location /system/health/nodes/fail {
+      limit_except GET {
+        deny all;
+      }
+      return 200 '{\"nodes\":[{\"host_ip\":\"10.0.3.118\",\"health\":0,\"role\":\"agent\"},{\"host_ip\":\"10.0.3.25\",\"health\":0,\"role\":\"agent\"},{\"host_ip\":\"10.0.3.245\",\"health\":0,\"role\":\"agent\"},{\"host_ip\":\"10.0.3.201\",\"health\":0,\"role\":\"agent\"},{\"host_ip\":\"10.0.1.39\",\"health\":1,\"role\":\"master\"}]}';
+    }
+
+    location /system/health/nodes{
+      limit_except GET {
+        deny all;
+      }
+      return 200 '{\"nodes\":[{\"host_ip\":\"10.0.3.118\",\"health\":0,\"role\":\"agent\"},{\"host_ip\":\"10.0.3.25\",\"health\":0,\"role\":\"agent\"},{\"host_ip\":\"10.0.3.245\",\"health\":0,\"role\":\"agent\"},{\"host_ip\":\"10.0.3.201\",\"health\":0,\"role\":\"agent\"},{\"host_ip\":\"10.0.1.39\",\"health\":0,\"role\":\"master\"}]}';
+    }
   }
-" > /etc/nginx/sites-enabled/sensu-plugins-dcos.conf
+" > /etc/nginx/sites-enabled/default
 service nginx restart
 
 cd $DATA_DIR
-SIGN_GEM=false $RUBY_HOME/bin/gem build sensu-plugins-dcos.gemspec
-$RUBY_HOME/bin/gem install sensu-plugins-dcos-*.gem
+SIGN_GEM=false gem build sensu-plugins-dcos.gemspec
+gem install sensu-plugins-dcos-*.gem
