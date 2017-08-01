@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
+### Added
+- Rakefile now inclutes kitchen integration tests
+
 ### [0.0.3] - 2017-08-12
 ### Changed
 - switched from vagrant to docker testing as it's lighter weight (@majormoses)
@@ -21,7 +24,6 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 - Extending get_value function to provide the ability to override field names
 
 ## [0.0.1] - 2017-04-18
-
 ### Added
 - Initial release
 
