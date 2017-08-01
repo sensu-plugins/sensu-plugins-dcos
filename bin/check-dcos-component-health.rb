@@ -46,10 +46,10 @@ require 'daybreak'
 require 'sensu-plugins-dcos'
 
 #
-# Check DCOS API
+# Check DCOS System Health API
 #
 
-class CheckDcosHealth < Sensu::Plugin::Check::CLI
+class CheckDcosComponentHealth < Sensu::Plugin::Check::CLI
   include Common
 
   option :url,
@@ -77,14 +77,18 @@ class CheckDcosHealth < Sensu::Plugin::Check::CLI
         ok
       else
         critical
+      end
     else
       failed = 0
       resource = get_data(config[:url])
       resource['units'].each do |unit|
         failed += unit[:health]
-      if value == 0
+      end
+      if failed == 0
         ok
       else
         critical
+      end
+    end
   end
 end

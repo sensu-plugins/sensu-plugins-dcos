@@ -8,8 +8,8 @@
 #
 #        http://www.apache.org/licenses/LICENSE-2.0
 #
-#    Unless required by applicable law or agreed to in writing, software
-#    distributed under the License is distributed on an "AS IS" BASIS,
+#    Unles required by applicable law or agreed to in writing, software
+#    distrbuted under the License is distributed on an "AS IS" BASIS,
 #    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
@@ -32,7 +32,7 @@ module Common
     critical 'Invalid JSON'
   end
 
-  def get_value(url, metric, filter, name_field = 'name', value_field = 'value', root_field = 'datapoints')
+  def get_value(url, metric, filter, name_field = 'name', value_field = 'value', root_field = 'datapoints') # rubocop:disable Metrics/ParameterLists
     resource = get_data(url)
     return {} if resource.nil? || resource.empty?
     if filter
