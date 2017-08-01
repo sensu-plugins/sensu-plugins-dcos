@@ -14,6 +14,7 @@
  * bin/check-dcos-container-count.rb
  * bin/check-dcos-metrics.rb
  * bin/check-dcos-ping.rb
+ * bin/check-dcos-component-health.rb
 
 ## Usage
 
