@@ -32,7 +32,7 @@ module Common
     critical 'Invalid JSON'
   end
 
-  def get_value(url, metric, filter, name_field = "name", value_field = "value", root_field = 'datapoints")
+  def get_value(url, metric, filter, name_field = 'name', value_field = 'value', root_field = 'datapoints')
     resource = get_data(url)
     return {} if resource.nil? || resource.empty?
     if filter
