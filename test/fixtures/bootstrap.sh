@@ -30,9 +30,6 @@ export LC_ALL="en_US.UTF-8"
 
 apt-get install -y nginx build-essential
 # service nginx status || service nginx start
-if [[ -f /etc/nginx/sites-enabled/default ]]; then
-  rm -f /etc/nginx/sites-enabled/default
-fi
 echo "
   server {
     listen 80;
@@ -125,7 +122,7 @@ echo "
       return 200 '{\"units\":[{\"id\":\"dcos-mesos-slave-public.service\",\"name\":\"Mesos Agent Public\",\"health\":1,\"description\":\"distributed systems kernel public agent\"},{\"id\":\"dcos-log-master.socket\",\"name\":\"DC/OS Log Socket\",\"health\":0,\"description\":\"socket for DC/OS Log service\"},{\"id\":\"dcos-metrics-master.socket\",\"name\":\"DC/OS Metrics Master Socket\",\"health\":0,\"description\":\"socket for DC/OS Metrics Master service\"},{\"id\":\"dcos-3dt.socket\",\"name\":\"DC/OS Diagnostics (3DT) Agent Socket\",\"health\":1,\"description\":\"socket for DC/OS Diagnostics Agent\"}]}';
     }
   }
-" > /etc/nginx/sites-enabled/sensu-plugins-dcos.conf
+" > /etc/nginx/sites-enabled/default
 service nginx restart
 
 cd $DATA_DIR
