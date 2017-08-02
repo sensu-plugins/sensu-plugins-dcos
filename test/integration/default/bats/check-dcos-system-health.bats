@@ -27,8 +27,20 @@ teardown() {
   [ "$output" = "CheckDcosComponentHealth OK: components.unhealthy = 0" ]
 }
 
+@test "Check failed components, CRITICAL" {
+  run $CHECK -u http://localhost/system/health/units/fail
+  [ $status = 2 ]
+  [ "$output" = "CheckDcosComponentHealth CRITICAL: components.unhealthy = 2" ]
+}
+
 @test "Check service health, OK" {
   run $CHECK -u http://localhost/system/health/units -c 'dcos-mesos-slave-public.service'
   [ $status = 0 ]
   [ "$output" = "CheckDcosComponentHealth OK: dcos-mesos-slave-public.service = 0" ]
+}
+
+@test "Check service health, CRITICAL" {
+  run $CHECK -u http://localhost/system/health/units/fail -c 'dcos-mesos-slave-public.service'
+  [ $status = 2 ]
+  [ "$output" = "CheckDcosComponentHealth CRITICAL: dcos-mesos-slave-public.service = 1" ]
 }

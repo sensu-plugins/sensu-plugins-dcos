@@ -72,7 +72,7 @@ class CheckDcosComponentHealth < Sensu::Plugin::Check::CLI
   def run
     if config[:component]
       value = get_value(config[:url], config[:component], config[:filter], 'id', 'health', 'units')
-      message = "#{config[:component]} = #{value}"
+      message "#{config[:component]} = #{value}"
       if value == 0
         ok
       else
