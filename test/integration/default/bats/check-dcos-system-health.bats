@@ -21,14 +21,14 @@ teardown() {
   export GEM_PATH=$OLD_GEM_PATH
 }
 
-@test "Check process count, OK" {
-  run $CHECK -u http://localhost/units
+@test "Check failed components, OK" {
+  run $CHECK -u http://localhost/system/health/units
   [ $status = 0 ]
-  [ "$output" = "CheckDcosComponentHealth OK" ]
+  [ "$output" = "CheckDcosComponentHealth OK: components.unhealthy = 0" ]
 }
 
-@test "Check dummy1 interface bytes in, CRITICAL" {
-  run $CHECK -u http://localhost/units -c 'dcos-mesos-dns.service'
+@test "Check service health, OK" {
+  run $CHECK -u http://localhost/system/health/units -c 'dcos-mesos-slave-public.service'
   [ $status = 0 ]
-  [ "$output" = "CheckDcosComponentHealth OK: dcos-mesos-dns.service is healthy" ]
+  [ "$output" = "CheckDcosComponentHealth OK: dcos-mesos-slave-public.service = 0" ]
 }

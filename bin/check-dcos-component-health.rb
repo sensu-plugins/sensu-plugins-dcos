@@ -42,7 +42,6 @@ require 'sensu-plugin/check/cli'
 require 'json'
 require 'net/http'
 require 'uri'
-require 'daybreak'
 require 'sensu-plugins-dcos'
 
 #
@@ -56,13 +55,13 @@ class CheckDcosComponentHealth < Sensu::Plugin::Check::CLI
          description: 'URL',
          short: '-u URL',
          long: '--url URL',
-         default: 'http://127.0.0.1:61001/system/health/v1/units'
+         default: 'http://127.0.0.1:1050/system/health/v1/units'
 
   option :component,
          description: 'Component ID',
          short: '-c COMPONENT',
          long: '--component COMPONENT',
-         default: ''
+         default: nil
 
   option :filter,
          description: 'Filter by Tags',
@@ -73,6 +72,7 @@ class CheckDcosComponentHealth < Sensu::Plugin::Check::CLI
   def run
     if config[:component]
       value = get_value(config[:url], config[:component], config[:filter], 'id', 'health', 'units')
+      message = "#{config[:component]} = #{value}"
       if value == 0
         ok
       else
@@ -82,8 +82,9 @@ class CheckDcosComponentHealth < Sensu::Plugin::Check::CLI
       failed = 0
       resource = get_data(config[:url])
       resource['units'].each do |unit|
-        failed += unit[:health]
+        failed += unit['health']
       end
+      message "components.unhealthy = #{failed}"
       if failed == 0
         ok
       else
