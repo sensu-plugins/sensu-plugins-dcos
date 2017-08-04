@@ -99,6 +99,20 @@ echo "
       }
       return 200 '{\"datapoints\": [{\"name\": \"cpu.cores\",\"value\": 2,\"unit\": \"count\",\"timestamp\": \"2017-04-18T08:36:18.398311311Z\"},{\"name\": \"memory.free\",\"value\": 2721533952,\"unit\": \"bytes\",\"timestamp\": \"2017-04-18T08:36:18.399019053Z\"},{\"name\": \"network.in\",\"value\": 208,\"unit\": \"bytes\",\"timestamp\": \"2017-04-18T08:36:18.399308233Z\",\"tags\": {\"interface\": \"dummy0\"}},{\"name\": \"network.out\",\"value\": 0,\"unit\": \"bytes\",\"timestamp\": \"2017-04-18T08:36:18.399308233Z\",\"tags\": {\"interface\": \"dummy0\"}},{\"name\": \"network.in\",\"value\": 0,\"unit\": \"bytes\",\"timestamp\": \"2017-04-18T08:36:18.399308233Z\",\"tags\": {\"interface\": \"dummy1\"}},{\"name\": \"process.count\",\"value\": 208,\"unit\": \"count\",\"timestamp\": \"2017-04-18T08:36:18.415071848Z\"}],\"dimensions\": {\"mesos_id\": \"a1ac060c-82e2-4a28-bc94-c7efcbfb137d-S5\",\"cluster_id\": \"244883b9-7f5a-4886-a1f8-eb5093215b3f\",\"hostname\": \"dcos-agent\"}}';
     }
+
+    location /system/health/units {
+      limit_except GET {
+        deny all;
+      }
+      return 200 '{\"units\":[{\"id\":\"dcos-mesos-slave-public.service\",\"name\":\"Mesos Agent Public\",\"health\":0,\"description\":\"distributed systems kernel public agent\"},{\"id\":\"dcos-log-master.socket\",\"name\":\"DC/OS Log Socket\",\"health\":0,\"description\":\"socket for DC/OS Log service\"},{\"id\":\"dcos-metrics-master.socket\",\"name\":\"DC/OS Metrics Master Socket\",\"health\":0,\"description\":\"socket for DC/OS Metrics Master service\"},{\"id\":\"dcos-3dt.socket\",\"name\":\"DC/OS Diagnostics (3DT) Agent Socket\",\"health\":0,\"description\":\"socket for DC/OS Diagnostics Agent\"}]}';
+    }
+
+    location /system/health/units/fail {
+      limit_except GET {
+        deny all;
+      }
+      return 200 '{\"units\":[{\"id\":\"dcos-mesos-slave-public.service\",\"name\":\"Mesos Agent Public\",\"health\":1,\"description\":\"distributed systems kernel public agent\"},{\"id\":\"dcos-log-master.socket\",\"name\":\"DC/OS Log Socket\",\"health\":0,\"description\":\"socket for DC/OS Log service\"},{\"id\":\"dcos-metrics-master.socket\",\"name\":\"DC/OS Metrics Master Socket\",\"health\":0,\"description\":\"socket for DC/OS Metrics Master service\"},{\"id\":\"dcos-3dt.socket\",\"name\":\"DC/OS Diagnostics (3DT) Agent Socket\",\"health\":1,\"description\":\"socket for DC/OS Diagnostics Agent\"}]}';
+    }
   }
 " > /etc/nginx/sites-enabled/sensu-plugins-dcos.conf
 service nginx restart
