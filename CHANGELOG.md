@@ -6,6 +6,7 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 ## [Unreleased]
 ### Added
 - Rakefile now inclutes kitchen integration tests
+- Fixes metric collection scripts to cover the cases when an app sets unit as ""
 
 ### [0.0.3] - 2017-08-12
 ### Changed
