@@ -99,6 +99,7 @@ class DCOSMetrics < Sensu::Plugin::Metric::CLI::Graphite
           end
           metric['name'].tr!('/', '.')
           metric['name'].squeeze!('.')
+          metric['unit'] = 'na' if metric['unit'].empty?
           output([config[:scheme], container, 'app', metric['unit'], metric['name']].join('.'), metric['value'])
         end
       end
