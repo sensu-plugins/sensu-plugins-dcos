@@ -4,9 +4,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
+
+## [0.0.4]
 ### Added
 - Rakefile now inclutes kitchen integration tests
-- Fixes metric collection scripts to cover the cases when an app sets unit as ""
+- Fixes metric collection scripts to cover the cases when an app sets unit as an empty string (@luisdavim)
 
 ### [0.0.3] - 2017-08-12
 ### Changed
@@ -29,6 +31,7 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 - Initial release
 
 [Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.0.3...HEAD
+[0.0.4]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.0.3...0.0.4
 [0.0.3]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.0.2...0.0.3
 [0.0.2]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.0.1...0.0.2
 [0.0.1]:https://github.com/sensu-plugins/sensu-plugins-dcos/compare/9c72afb596622f6c1a51f95281f52bd53791ede9...0.0.1
