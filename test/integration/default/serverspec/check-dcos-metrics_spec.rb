@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
+require 'shared_spec'
 
 gem_path = '/usr/local/bin'
 check_name = 'check-dcos-metrics.rb'
 check = "#{gem_path}/#{check_name}"
 
-describe command("which #{check}") do
-  its(:exit_status) { should eq 0 }
-  its(:stdout) { should match(Regexp.new(Regexp.escape(check))) }
+describe 'ruby environment' do
+  it_behaves_like 'ruby checks', check
 end
 
 describe file(check) do
