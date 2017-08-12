@@ -27,7 +27,7 @@ script:
 # - sudo chown -R travis:travis /home/travis/.rvm
 - gem build sensu-plugins-dcos.gemspec
 - gem install sensu-plugins-dcos-*.gem
-- bundle exec kitchen test
+# - bundle exec kitchen test
 deploy:
   provider: rubygems
   api_key:
