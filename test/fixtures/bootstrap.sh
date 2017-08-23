@@ -122,6 +122,23 @@ echo "
       return 200 '{\"units\":[{\"id\":\"dcos-mesos-slave-public.service\",\"name\":\"Mesos Agent Public\",\"health\":1,\"description\":\"distributed systems kernel public agent\"},{\"id\":\"dcos-log-master.socket\",\"name\":\"DC/OS Log Socket\",\"health\":0,\"description\":\"socket for DC/OS Log service\"},{\"id\":\"dcos-metrics-master.socket\",\"name\":\"DC/OS Metrics Master Socket\",\"health\":0,\"description\":\"socket for DC/OS Metrics Master service\"},{\"id\":\"dcos-3dt.socket\",\"name\":\"DC/OS Diagnostics (3DT) Agent Socket\",\"health\":1,\"description\":\"socket for DC/OS Diagnostics Agent\"}]}';
     }
   }
+
+    location /system/health/nodes/fail {
+      limit_except GET {
+        deny all;
+      }
+      return 200 '{"nodes":[{"host_ip":"10.0.3.118","health":0,"role":"agent"},{"host_ip":"10.0.3.25","health":0,"role":"agent"},{"host_ip":"10.0.3.245","health":0,"role":"agent"},{"host_ip":"10.0.3.201","health":0,"role":"agent"},{"host_ip":"10.0.1.39","health":1,"role":"master"}]}';
+    }
+  }
+
+    location /system/health/nodes{
+      limit_except GET {
+        deny all;
+      }
+      return 200 '{"nodes":[{"host_ip":"10.0.3.118","health":0,"role":"agent"},{"host_ip":"10.0.3.25","health":0,"role":"agent"},{"host_ip":"10.0.3.245","health":0,"role":"agent"},{"host_ip":"10.0.3.201","health":0,"role":"agent"},{"host_ip":"10.0.1.39","health":0,"role":"master"}]}';
+    }
+  }
+
 " > /etc/nginx/sites-enabled/default
 service nginx restart
 

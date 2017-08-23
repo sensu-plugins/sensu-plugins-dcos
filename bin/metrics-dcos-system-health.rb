@@ -63,7 +63,6 @@ class DcosHealthMetrics < Sensu::Plugin::Metric::CLI::Graphite
 
   def run
     {'units': ['id'], 'nodes': ['role','host_ip']}.each do |endpoint,attributes|
-      failed = 0
       url = "#{config['url']}/#{endpoint}"
       resource = get_data(url)
       resource[endpoint].each do |item|

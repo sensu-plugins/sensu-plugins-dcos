@@ -68,7 +68,7 @@ class CheckDcosNodeHealth < Sensu::Plugin::Check::CLI
         node['role'] == config[:role] && failed += node['health']
       end
       message "#{config[:role]}.nodes.unhealthy = #{failed}"
-      if failed == 0
+      if failed.zero?
         ok
       else
         critical
@@ -80,7 +80,7 @@ class CheckDcosNodeHealth < Sensu::Plugin::Check::CLI
         failed += node['health']
       end
       message "nodes.unhealthy = #{failed}"
-      if failed == 0
+      if failed.zero?
         ok
       else
         critical

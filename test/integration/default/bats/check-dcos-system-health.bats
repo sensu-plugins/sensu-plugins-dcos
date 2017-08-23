@@ -13,6 +13,7 @@ setup() {
   INNER_GEM_HOME=$($RUBY_HOME/bin/ruby -e 'print ENV["GEM_HOME"]')
   [ -n "$INNER_GEM_HOME" ] && GEM_BIN=$INNER_GEM_HOME/bin || GEM_BIN=$RUBY_HOME/bin
   export CHECK="$RUBY_HOME/bin/ruby $GEM_BIN/check-dcos-component-health.rb"
+  export CHECK2="$RUBY_HOME/bin/ruby $GEM_BIN/check-dcos-node-health.rb"
 }
 
 teardown() {
@@ -43,4 +44,16 @@ teardown() {
   run $CHECK -u http://localhost/system/health/units/fail -c 'dcos-mesos-slave-public.service'
   [ $status = 2 ]
   [ "$output" = "CheckDcosComponentHealth CRITICAL: dcos-mesos-slave-public.service = 1" ]
+}
+
+@test "Check node health, CRITICAL" {
+  run $CHECK2 -u http://localhost/system/health/nodes/fail -r master
+  [ $status = 2 ]
+  [ "$output" = "CheckDcosNodeHealth CRITICAL: master.nodes.unhealthy = 1" ]
+}
+
+@test "Check node health, OK" {
+  run $CHECK2 -u http://localhost/system/health/nodes
+  [ $status = 0 ]
+  [ "$output" = "CheckDcosNodeHealth CRITICAL: nodes.unhealthy = 0" ]
 }
