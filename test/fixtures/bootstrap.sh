@@ -127,7 +127,7 @@ echo "
       limit_except GET {
         deny all;
       }
-      return 200 '{"nodes":[{"host_ip":"10.0.3.118","health":0,"role":"agent"},{"host_ip":"10.0.3.25","health":0,"role":"agent"},{"host_ip":"10.0.3.245","health":0,"role":"agent"},{"host_ip":"10.0.3.201","health":0,"role":"agent"},{"host_ip":"10.0.1.39","health":1,"role":"master"}]}';
+      return 200 '{\"nodes\":[{\"host_ip\":\"10.0.3.118\",\"health\":0,\"role\":\"agent\"},{\"host_ip\":\"10.0.3.25\",\"health\":0,\"role\":\"agent\"},{\"host_ip\":\"10.0.3.245\",\"health\":0,\"role\":\"agent\"},{\"host_ip\":\"10.0.3.201\",\"health\":0,\"role\":\"agent\"},{\"host_ip\":\"10.0.1.39\",\"health\":1,\"role\":\"master\"}]}';
     }
   }
 
@@ -135,7 +135,7 @@ echo "
       limit_except GET {
         deny all;
       }
-      return 200 '{"nodes":[{"host_ip":"10.0.3.118","health":0,"role":"agent"},{"host_ip":"10.0.3.25","health":0,"role":"agent"},{"host_ip":"10.0.3.245","health":0,"role":"agent"},{"host_ip":"10.0.3.201","health":0,"role":"agent"},{"host_ip":"10.0.1.39","health":0,"role":"master"}]}';
+      return 200 '{\"nodes\":[{\"host_ip\":\"10.0.3.118\",\"health\":0,\"role\":\"agent\"},{\"host_ip\":\"10.0.3.25\",\"health\":0,\"role\":\"agent\"},{\"host_ip\":\"10.0.3.245\",\"health\":0,\"role\":\"agent\"},{\"host_ip\":\"10.0.3.201\",\"health\":0,\"role\":\"agent\"},{\"host_ip\":\"10.0.1.39\",\"health\":0,\"role\":\"master\"}]}';
     }
   }
 
