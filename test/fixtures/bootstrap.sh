@@ -6,22 +6,30 @@
 
 set -e
 
+apt-get install -y wget
+
 source /etc/profile
 DATA_DIR=/tmp/kitchen/data
-RUBY_HOME=${MY_RUBY_HOME:-/opt/sensu/embedded}
+RUBY_HOME=${MY_RUBY_HOME}
 
-if [ "$RUBY_HOME" = "/opt/sensu/embedded" ] && [ ! -d $RUBY_HOME ]; then
-  wget -q http://repositories.sensuapp.org/apt/pubkey.gpg -O- | apt-key add -
-  echo "deb http://repositories.sensuapp.org/apt sensu main" > /etc/apt/sources.list.d/sensu.list
-  apt-get update
-  apt-get install -y sensu
-else
-  apt-get update
-fi
+# Set the locale
+apt-get install -y locales
+locale-gen en_US.UTF-8
+export LANG="en_US.UTF-8"
+export LANGUAGE="en_US:en"
+export LC_ALL="en_US.UTF-8"
+
+# if [[ "$RUBY_HOME" = "/opt/sensu/embedded" ]] && [[ ! -d $RUBY_HOME ]]; then
+#   wget -q http://repositories.sensuapp.org/apt/pubkey.gpg -O- | apt-key add -
+#   echo "deb http://repositories.sensuapp.org/apt sensu main" > /etc/apt/sources.list.d/sensu.list
+#   apt-get update
+#   apt-get install -y sensu
+# else
+#   apt-get update
+# fi
 
 apt-get install -y nginx build-essential
 # service nginx status || service nginx start
-rm /etc/nginx/sites-enabled/default
 echo "
   server {
     listen 80;
@@ -114,9 +122,9 @@ echo "
       return 200 '{\"units\":[{\"id\":\"dcos-mesos-slave-public.service\",\"name\":\"Mesos Agent Public\",\"health\":1,\"description\":\"distributed systems kernel public agent\"},{\"id\":\"dcos-log-master.socket\",\"name\":\"DC/OS Log Socket\",\"health\":0,\"description\":\"socket for DC/OS Log service\"},{\"id\":\"dcos-metrics-master.socket\",\"name\":\"DC/OS Metrics Master Socket\",\"health\":0,\"description\":\"socket for DC/OS Metrics Master service\"},{\"id\":\"dcos-3dt.socket\",\"name\":\"DC/OS Diagnostics (3DT) Agent Socket\",\"health\":1,\"description\":\"socket for DC/OS Diagnostics Agent\"}]}';
     }
   }
-" > /etc/nginx/sites-enabled/sensu-plugins-dcos.conf
+" > /etc/nginx/sites-enabled/default
 service nginx restart
 
 cd $DATA_DIR
-SIGN_GEM=false $RUBY_HOME/bin/gem build sensu-plugins-dcos.gemspec
-$RUBY_HOME/bin/gem install sensu-plugins-dcos-*.gem
+SIGN_GEM=false gem build sensu-plugins-dcos.gemspec
+gem install sensu-plugins-dcos-*.gem

@@ -1,4 +1,6 @@
 #! /usr/bin/env ruby
+# frozen_string_literal: true
+
 #
 # check-dcos-ping
 #
@@ -58,7 +60,7 @@ class CheckDcosPing < Sensu::Plugin::Check::CLI
   def run
     value = get_data(config[:url])['ok']
     message "OK = #{value}"
-    if value === true
+    if value == true
       ok
     else
       critical

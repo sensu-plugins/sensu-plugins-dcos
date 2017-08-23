@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # LICENCE:
 #    PTC http://www.ptc.com/
 #    Copyright 2017 PTC Inc.
