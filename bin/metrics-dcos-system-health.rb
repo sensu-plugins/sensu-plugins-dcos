@@ -62,11 +62,14 @@ class DcosHealthMetrics < Sensu::Plugin::Metric::CLI::Graphite
          default: 'http://127.0.0.1:1050/system/health/v1'
 
   def run
-    {'units': ['id'], 'nodes': ['role','host_ip']}.each do |endpoint,attributes|
+    measurements = { units: ['id'], nodes: %w[role host_ip] }
+    measurements.each do |endpoint, attributes|
       url = "#{config['url']}/#{endpoint}"
       resource = get_data(url)
       resource[endpoint].each do |item|
-        path = attributes.map{|attr| item[attr].gsub('.','-')}.join('.')
+        path = attributes.map { |attr| item[attr].tr('.', '-') }.join('.')
         output([config[:scheme], endpoint, path].join('.'), item['health'])
       end
+    end
+  end
 end

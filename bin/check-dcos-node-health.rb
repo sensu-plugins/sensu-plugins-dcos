@@ -61,30 +61,23 @@ class CheckDcosNodeHealth < Sensu::Plugin::Check::CLI
          default: nil
 
   def run
+    failed = 0
+    resource = get_data(config[:url])
     if config[:role]
-      failed = 0
-      resource = get_data(config[:url])
       resource['nodes'].each do |node|
         node['role'] == config[:role] && failed += node['health']
       end
       message "#{config[:role]}.nodes.unhealthy = #{failed}"
-      if failed.zero?
-        ok
-      else
-        critical
-      end
     else
-      failed = 0
-      resource = get_data(config[:url])
       resource['nodes'].each do |node|
         failed += node['health']
       end
       message "nodes.unhealthy = #{failed}"
-      if failed.zero?
-        ok
-      else
-        critical
-      end
+    end
+    if failed.zero?
+      ok
+    else
+      critical
     end
   end
 end
