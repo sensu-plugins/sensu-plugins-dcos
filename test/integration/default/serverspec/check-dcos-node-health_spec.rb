@@ -11,12 +11,12 @@ describe 'ruby environment' do
   it_behaves_like 'ruby checks', check
 end
 
-describe command("#{check} -u http://localhost/system/health/nodesi/fail") do
+describe command("#{check} -u http://localhost/system/health/nodes/fail -r master") do
   its(:exit_status) { should eq 2 }
   its(:stdout) { should match(Regexp.new(Regexp.escape('CheckDcosNodeHealth CRITICAL: master.nodes.unhealthy = 1'))) }
 end
 
-describe command("#{check} -u http://localhost/system/health/units") do
+describe command("#{check} -u http://localhost/system/health/nodes") do
   its(:exit_status) { should eq 0 }
   its(:stdout) { should match(Regexp.new(Regexp.escape('CheckDcosNodeHealth OK: nodes.unhealthy = 0'))) }
 end
