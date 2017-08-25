@@ -62,8 +62,7 @@ class DcosHealthMetrics < Sensu::Plugin::Metric::CLI::Graphite
          default: 'http://127.0.0.1:1050/system/health/v1'
 
   def run
-    {'units': ['id'], 'nodes': ['role','host_ip']}.each do |endpoint,attributes|
-      failed = 0
+    { units: ['id'], nodes: %w[role host_ip] }.each do |endpoint, attributes|
       url = "#{config['url']}/#{endpoint}"
       resource = get_data(url)
       resource[endpoint].each do |item|
