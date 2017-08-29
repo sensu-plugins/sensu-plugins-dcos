@@ -4,6 +4,9 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
+### Added
+- New DC/OS node health check (@zemmet)
+- New DC/OS system health metric collection script (@zemmet)
 
 ## [0.0.4]
 ### Added
@@ -23,8 +26,8 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 
 ## [0.0.2] - 2017-08-03
 ### Added
-- New DC/OS Component Health check
-- Extending get_value function to provide the ability to override field names
+- New DC/OS Component Health check (@zemmet)
+- Extending get_value function to provide the ability to override field names (@zemmet)
 
 ## [0.0.1] - 2017-04-18
 ### Added
