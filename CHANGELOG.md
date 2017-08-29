@@ -4,13 +4,15 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
+
+## [0.1.0] - 2017-08-28
 ### Added
 - New DC/OS node health check (@zemmet)
 - New DC/OS system health metric collection script (@zemmet)
 
-## [0.0.4]
+## [0.0.4] - 2017-08-12
 ### Added
-- Rakefile now inclutes kitchen integration tests
+- Rakefile now includes kitchen integration tests
 - Fixes metric collection scripts to cover the cases when an app sets unit as an empty string (@luisdavim)
 
 ### [0.0.3] - 2017-08-12
@@ -33,7 +35,8 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.0.3...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.0.4...HEAD
+[0.1.0]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.0.4...0.1.0
 [0.0.4]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.0.3...0.0.4
 [0.0.3]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.0.2...0.0.3
 [0.0.2]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.0.1...0.0.2
