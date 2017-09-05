@@ -65,7 +65,7 @@ class DcosHealthMetrics < Sensu::Plugin::Metric::CLI::Graphite
     { units: ['id'], nodes: %w[role host_ip] }.each do |endpoint, attributes|
       url = "#{config[:url]}/#{endpoint}"
       resource = get_data(url)
-      resource["#{endpoint}"].each do |item|
+      resource[endpoint.to_s].each do |item|
         path = attributes.map { |attr| item[attr].tr('.', '-') }.join('.')
         output([config[:scheme], endpoint, path].join('.'), item['health'])
       end
