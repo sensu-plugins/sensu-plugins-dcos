@@ -39,7 +39,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-require 'sensu-plugin/check/cli'
+require 'sensu-plugin/metric/cli'
 require 'json'
 require 'net/http'
 require 'uri'
