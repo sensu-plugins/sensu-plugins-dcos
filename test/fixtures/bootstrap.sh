@@ -6,6 +6,7 @@
 
 set -e
 
+apt-get update
 apt-get install -y wget
 
 source /etc/profile

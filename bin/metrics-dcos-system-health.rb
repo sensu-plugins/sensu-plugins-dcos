@@ -39,7 +39,7 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 
-require 'sensu-plugin/check/cli'
+require 'sensu-plugin/metric/cli'
 require 'json'
 require 'net/http'
 require 'uri'
@@ -63,12 +63,13 @@ class DcosHealthMetrics < Sensu::Plugin::Metric::CLI::Graphite
 
   def run
     { units: ['id'], nodes: %w[role host_ip] }.each do |endpoint, attributes|
-      url = "#{config['url']}/#{endpoint}"
+      url = "#{config[:url]}/#{endpoint}"
       resource = get_data(url)
-      resource[endpoint].each do |item|
+      resource[endpoint.to_s].each do |item|
         path = attributes.map { |attr| item[attr].tr('.', '-') }.join('.')
         output([config[:scheme], endpoint, path].join('.'), item['health'])
       end
     end
+    ok
   end
 end

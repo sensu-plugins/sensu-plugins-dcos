@@ -4,6 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
+- Small but essential fixes for DC/OS system health metrics collection (@zemmet)
 
 ## [0.1.0] - 2017-08-28
 ### Added
