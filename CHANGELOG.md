@@ -1,10 +1,22 @@
 # Change Log
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachangelog.com/)
+This CHANGELOG follows the format listed at [Our CHANGELOG Guidelines ](https://github.com/sensu-plugins/community/blob/master/HOW_WE_CHANGELOG.md).
+Which is based on [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
-- Small but essential fixes for DC/OS system health metrics collection (@zemmet)
+
+## [0.1.1] - 2017-09-09
+### Fixed
+- metrics-dcos-system-health.rb: Small but essential fixes for DC/OS system health metrics collection (@zemmet)
+- pr template spelling (@majormoses)
+
+### Added
+- automated test for metrics-dcos-system-health.rb (@zemmet)
+
+### Changed
+- test/fixtures/bootstrap.sh: run an apt-update before trying to install (@zemmet)
+- updated our changelog guidelines location
 
 ## [0.1.0] - 2017-08-28
 ### Added
@@ -36,7 +48,8 @@ This CHANGELOG follows the format listed at [Keep A Changelog](http://keepachang
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.0.4...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.1.1...HEAD
+[0.1.1]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.0.4...0.1.0
 [0.0.4]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.0.3...0.0.4
 [0.0.3]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.0.2...0.0.3
