@@ -66,6 +66,13 @@ The `check-dcos-ping.rb` will return `OK` if the host reports itself as heathy o
 check-dcos-ping.rb -h 'http://127.0.0.1:61001/system/v1/metrics/v0/ping'
 ```
 
+### Jobs Health Check
+
+The `check-dcos-jobs-health.rb` will return `OK` if the job is successfully executed for the last 15 minutes or `CRITICAL` if the tasks return FAILED or KILLED or the job is stuck take longer than (15 minutes - threshold )
+```
+check-dcos-jobs-health.rb -u 'http://leader.mesos:5050/tasks' -p jobname -w 1000 -t 200 
+```
+
 ## Installation
 
 [Installation and Setup](http://sensu-plugins.io/docs/installation_instructions.html)
