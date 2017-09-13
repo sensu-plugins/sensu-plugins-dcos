@@ -6,6 +6,10 @@ Which is based on [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
 
+## [0.2.1] - 2017-09-12
+### Added
+- `check-dcos-jobs-health.rb`: checks the health of a DC/OS jobs exposed by the mesos API endpoint /tasks (@mgaitien)
+
 ## [0.1.1] - 2017-09-09
 ### Fixed
 - metrics-dcos-system-health.rb: Small but essential fixes for DC/OS system health metrics collection (@zemmet)
@@ -36,7 +40,7 @@ Which is based on [Keep A Changelog](http://keepachangelog.com/)
 - standard `.rubocop.yml`, `CHANGELOG.md`, `Rakefile` files
 
 ### Removed
-- removed various misc files from trnasfer such as circle-ci stuff (@majormoses)
+- removed various misc files from transfer such as circle-ci stuff (@majormoses)
 
 
 ## [0.0.2] - 2017-08-03
@@ -48,7 +52,8 @@ Which is based on [Keep A Changelog](http://keepachangelog.com/)
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.1.1...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.2.1...HEAD
+[0.2.1]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.1.1...0.2.1
 [0.1.1]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.1.0...0.1.1
 [0.1.0]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.0.4...0.1.0
 [0.0.4]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.0.3...0.0.4
