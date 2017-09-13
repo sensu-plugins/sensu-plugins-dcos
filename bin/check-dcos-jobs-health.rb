@@ -62,28 +62,37 @@ class CheckDcosJobsHealth < Sensu::Plugin::Check::CLI
 
   option :window,
          description: 'Window/history for tasks',
-         short: '-w time',
-         long: '--window time',
-         default: 1000.0000
+         short: '-w time minutes',
+         long: '--window time minutes',
+         default: 15
 
-  option :threshold,
-         description: 'Threshold for a running task - the Window',
-         short: '-t float',
-         long: '--threshold float',
-         default: 200.0000
+  option :max,
+         description: 'Maximum time the running task',
+         short: '-M minutes',
+         long: '--max minutes',
+         default: 12
+
+  option :min,
+         description: 'Minimum time the task should run',
+         short: '-m minutes',
+         long: '--min minutes',
+         default: 1
 
   def run
     t = Time.now.to_f.round(4)
     resource = get_data(config[:url])
     resource['tasks'].each do |unit|
-      if unit['id'] =~ /#{config[:pattern].sub('.', '.*')}/ && unit['statuses'][0]['timestamp'] > t - config[:window].to_f.round(4)
+      if unit['id'] =~ /#{config[:pattern].sub('.', '.*').sub(' ', '|')}/ && unit['statuses'][0]['timestamp'] > t - (60 * config[:window].to_f.round(4))
         if unit['state'] =~ /RUNNING/
-          if t - unit['statuses'][0]['timestamp'] > (config[:window].to_f.round(4) - config[:threshold].to_f.round(4))
+          if t - unit['statuses'][0]['timestamp'] > (60 * config[:max].to_f.round(4))
             message "JOB: #{unit['id']} is taking too long to finish..."
             critical
           end
         elsif unit['state'] =~ /FAILED|KILLED/
           message "JOB: #{unit['id']}"
+          critical
+        elsif t - unit['statuses'][1]['timestamp'] < (60 * config[:min].to_f.round(4))
+          message "JOB: #{unit['id']} took less then expected"
           critical
         end
       end
