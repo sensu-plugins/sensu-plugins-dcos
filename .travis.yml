@@ -9,9 +9,9 @@ before_install:
 install:
 - bundle install
 rvm:
-# - 2.1
-# - 2.2
-# - 2.3.0
+- 2.1
+- 2.2
+- 2.3.0
 - 2.4.1
 notifications:
   email:
@@ -20,10 +20,8 @@ notifications:
     on_success: change
     on_failure: always
 script:
-# - rvm use --default $TRAVIS_RUB_VERSION
-# - echo 'export PATH="$PATH:/home/travis/.rvm/bin"' | sudo tee -a /etc/profile
-# - echo 'source /home/travis/.rvm/scripts/rvm' | sudo tee -a /etc/profile
-- bundle exec rake default
+- bundle exec rake quick
+- bundle exec rake kitchen:ruby-`echo $TRAVIS_RUBY_VERSION | sed -e "s/\.//g"`-debian-8
 # - sudo chown -R travis:travis /home/travis/.rvm
 - gem build sensu-plugins-dcos.gemspec
 - gem install sensu-plugins-dcos-*.gem
@@ -36,7 +34,8 @@ deploy:
   on:
     tags: true
     all_branches: true
-    # rvm: 2.1
-    # rvm: 2.3.0
+    rvm: 2.1
+    rvm: 2.2
+    rvm: 2.3.0
     rvm: 2.4.1
     repo: sensu-plugins/sensu-plugins-dcos
