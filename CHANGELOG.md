@@ -5,6 +5,12 @@ This CHANGELOG follows the format listed at [Our CHANGELOG Guidelines ](https://
 Which is based on [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
+### Added
+- started re-testing all supported ruby versions again (@majormoses)
+- kitchen converge on all tested versions in travis in a matrix fashion (@majormoses)
+
+### Changed
+- created a quick task to run all but integration and switched travis to use it. (@majormoses)
 
 ## [0.2.1] - 2017-09-12
 ### Added
