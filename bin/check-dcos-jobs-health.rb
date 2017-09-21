@@ -52,7 +52,7 @@ class CheckDcosJobsHealth < Sensu::Plugin::Check::CLI
          description: 'URL',
          short: '-u URL',
          long: '--url URL',
-         default: 'http://leader.mesos:5050/tasks'
+         default: 'http://leader.mesos:5050/tasks?order=desc'
 
   option :pattern,
          description: 'Pattern',
@@ -87,16 +87,31 @@ class CheckDcosJobsHealth < Sensu::Plugin::Check::CLI
           if t - unit['statuses'][0]['timestamp'] > (60 * config[:max].to_f.round(4))
             message "JOB: #{unit['id']} is taking too long to finish..."
             critical
+          else
+            message "#{unit['id']}"
+            ok
           end
         elsif unit['state'] =~ /FAILED|KILLED/
           message "JOB: #{unit['id']}"
           critical
-        elsif t - unit['statuses'][1]['timestamp'] < (60 * config[:min].to_f.round(4))
+        elsif unit['statuses'][1]['timestamp'] - unit['statuses'][0]['timestamp'] < (60 * config[:min].to_f.round(4))
           message "JOB: #{unit['id']} took less then expected"
           critical
+        else
+          message "#{unit['id']}"
+          ok
         end
+      elsif unit['id'] =~ /#{config[:pattern].sub('.', '.*').sub(' ', '|')}/ && unit.key?("statuses")
+        if t < (unit['statuses'][0]['timestamp'] + (60 * config[:window].to_f.round(4)) + 60)
+          message "#{unit['id']}"
+          ok
+        else
+          message "JOB: did not run on schedule"
+          critical
+        end
+      else
+        next
       end
     end
-    ok
   end
 end
