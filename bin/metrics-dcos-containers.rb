@@ -39,8 +39,6 @@
 #    See the License for the specific language governing permissions and
 #    limitations under the License.
 #
-# TODO:
-#    Add dimentions to the metric name (framework_name; framework_role, executor_id)
 
 require 'sensu-plugin/metric/cli'
 require 'json'
@@ -77,16 +75,28 @@ class DCOSMetrics < Sensu::Plugin::Metric::CLI::Graphite
          long: '--uri URI',
          default: '/system/v1/metrics/v0/containers'
 
+  option :dimensions,
+         description: 'comma seperated list of dimensions to add into the output',
+         short: '-d DIMENSIONS',
+         long: '--dimensions DIMENSIONS',
+         required: false
+
   def run
     containers = get_data("http://#{config[:server]}:#{config[:port]}#{config[:uri]}")
-    unless containers.nil? || containers.empty? # rubocop:desable Style/MultilineIfModifier
-      containers.each do |container|
+    unless containers.nil? || containers.empty?
+      containers.each do |container| # rubocop:disable Metrics/BlockLength
         all_metrics = get_data("http://#{config[:server]}:#{config[:port]}#{config[:uri]}/#{container}")
+        if config[:dimensions]
+          extra_tags = []
+          config[:dimensions].tr(' ', '').split(',').each do |d|
+            extra_tags.push(all_metrics['dimensions'][d]) if all_metrics['dimensions'][d]
+          end
+        end
         if all_metrics.key?('datapoints')
           all_metrics['datapoints'].each do |metric|
             metric['name'].tr!('/', '.')
             metric['name'].squeeze!('.')
-            output([config[:scheme], container, metric['unit'], metric['name']].join('.'), metric['value'])
+            output([config[:scheme], extra_tags, container, metric['unit'], metric['name']].compact.join('.'), metric['value'])
           end
         end
         app_metrics = get_data("http://#{config[:server]}:#{config[:port]}#{config[:uri]}/#{container}/app")
@@ -100,7 +110,7 @@ class DCOSMetrics < Sensu::Plugin::Metric::CLI::Graphite
           metric['name'].tr!('/', '.')
           metric['name'].squeeze!('.')
           metric['unit'] = 'na' if metric['unit'].empty?
-          output([config[:scheme], container, 'app', metric['unit'], metric['name']].join('.'), metric['value'])
+          output([config[:scheme], extra_tags, container, 'app', metric['unit'], metric['name']].compact.join('.'), metric['value'])
         end
       end
     end
