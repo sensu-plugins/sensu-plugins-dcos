@@ -9,12 +9,16 @@
 ## Functionality
 
 ## Files
- * bin/check-dcos-metrics.rb
- * check-dcos-container-metrics.rb
- * bin/check-dcos-container-count.rb
- * bin/check-dcos-metrics.rb
- * bin/check-dcos-ping.rb
  * bin/check-dcos-component-health.rb
+ * bin/check-dcos-container-count.rb
+ * bin/check-dcos-container-metrics.rb
+ * bin/check-dcos-jobs-health.rb
+ * bin/check-dcos-metrics.rb
+ * bin/check-dcos-node-health.rb
+ * bin/check-dcos-ping.rb
+ * bin/metrics-dcos-containers.rb
+ * bin/metrics-dcos-host.rb
+ * bin/metrics-dcos-system-health.rb
 
 ## Usage
 
@@ -58,6 +62,9 @@ This is an example how to use this plugin to ship metrics to InfluxDB using the 
   }
 }
 ```
+
+metrics-dcos-containers.rb can be used in the same way to ship container metrics (from frameworks not apps) specify a comma seperated list of the dimensions you require in the oupput to the --dimensions flag. example metrics-dcos-containers.rb --dimensions 'framework_name,excutor_id'  
+
 
 ### Host Health Check
 

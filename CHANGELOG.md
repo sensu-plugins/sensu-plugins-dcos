@@ -6,6 +6,11 @@ Which is based on [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
 
+## [0.3.1] - 2017-09-10
+## Added
+- todo item is added: metrics-dcos-containers.rb Add dimentions to the metric name framework_name, framework_role, executor_id (@1fox1)
+- added dimensions argument, argument takes a comma seperated list of the dimensions you wish to output (@1fox1)
+
 ## [0.3.0] - 2017-09-19
 ### Added
 - started re-testing all supported ruby versions again (@majormoses)
