@@ -5,6 +5,8 @@ This CHANGELOG follows the format listed at [Our CHANGELOG Guidelines ](https://
 Which is based on [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
+
+## [0.4.0] - 2017-10-20
 ### Added
 - todo item is added: metrics-dcos-containers.rb Add dimentions to the metric name framework_name, framework_role, executor_id (@1fox1)
 - added dimensions argument, argument takes a comma seperated list of the dimensions you wish to output (@1fox1)
@@ -63,7 +65,8 @@ Which is based on [Keep A Changelog](http://keepachangelog.com/)
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.3.0...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.4.0...HEAD
+[0.4.0]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.2.1...0.3.0
 [0.2.1]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.1.1...0.2.1
 [0.1.1]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.1.0...0.1.1
