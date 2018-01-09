@@ -86,6 +86,7 @@ class DCOSMetrics < Sensu::Plugin::Metric::CLI::Graphite
     unless containers.nil? || containers.empty?
       containers.each do |container| # rubocop:disable Metrics/BlockLength
         all_metrics = get_data("http://#{config[:server]}:#{config[:port]}#{config[:uri]}/#{container}")
+        next if all_metrics.empty?
         if config[:dimensions]
           extra_tags = []
           config[:dimensions].tr(' ', '').split(',').each do |d|
