@@ -69,11 +69,11 @@ class DCOSMetrics < Sensu::Plugin::Metric::CLI::Graphite
          required: false,
          default: '61001'
 
-  option :agent_host,
-         description: 'DCOS agent host',
-         long: '--agent-host PORT',
+  option :agent_ip_discovery_command,
+         description: 'DCOS agent ip discovery command',
+         long: '--agent-ip-discovery-command COMMAND',
          required: false,
-         default: `/opt/mesosphere/bin/detect_ip`
+         default: '/opt/mesosphere/bin/detect_ip'
 
   option :agent_port,
          description: 'DCOS agent port',
@@ -98,7 +98,8 @@ class DCOSMetrics < Sensu::Plugin::Metric::CLI::Graphite
     # state endpoint will be called only once and when needed and return the
     # cached result immediately for subsequent calls.
     return @frameworks if @frameworks
-    state = get_data("http://#{config[:agent_host]}:#{config[:agent_port]}/slave(1)/state")
+    agent_ip = `#{config[:agent_ip_discovery_command]}`
+    state = get_data("http://#{agent_ip}:#{config[:agent_port]}/slave(1)/state")
     @frameworks = {}
     %w[frameworks completed_frameworks].each do |fw_key|
       state[fw_key].each do |framework|
