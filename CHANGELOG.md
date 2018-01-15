@@ -6,6 +6,12 @@ Which is based on [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
 
+### Security
+- updated rubocop dependency to `~> 0.51.0` per: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-8418. (@majormoses)
+
+### Changed
+- appeased the cops (@majormoses)
+
 ## [0.4.1] - 2018-01-15
 ### Fixed
 - fixed the handling of empty container metrics issue from dcos-metrics

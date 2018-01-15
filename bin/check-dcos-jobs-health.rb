@@ -1,4 +1,6 @@
 #! /usr/bin/env ruby
+# frozen_string_literal: true
+
 #
 # check-dcos-jobs-health
 #
@@ -76,13 +78,13 @@ class CheckDcosJobsHealth < Sensu::Plugin::Check::CLI
     t = Time.now.to_f.round(4)
     resource = get_data(config[:url])
     resource['tasks'].each do |unit|
-      if unit['id'] =~ /#{config[:pattern].sub('.', '.*')}/ && unit['statuses'][0]['timestamp'] > t - config[:window].to_f.round(4)
-        if unit['state'] =~ /RUNNING/
+      if unit['id'].match?(/#{config[:pattern].sub('.', '.*')}/) && unit['statuses'][0]['timestamp'] > t - config[:window].to_f.round(4)
+        if unit['state'].match?(/RUNNING/)
           if t - unit['statuses'][0]['timestamp'] > (config[:window].to_f.round(4) - config[:threshold].to_f.round(4))
             message "JOB: #{unit['id']} is taking too long to finish..."
             critical
           end
-        elsif unit['state'] =~ /FAILED|KILLED/
+        elsif unit['state'].match?(/FAILED|KILLED/)
           message "JOB: #{unit['id']}"
           critical
         end
