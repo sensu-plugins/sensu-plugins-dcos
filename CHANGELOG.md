@@ -5,8 +5,8 @@ This CHANGELOG follows the format listed at [Our CHANGELOG Guidelines ](https://
 Which is based on [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
-### Changed
-- fixes the handling of empty container metrics issue from dcos-metrics
+### Fixed
+- fixed the handling of empty container metrics issue from dcos-metrics
 
 ## [0.4.0] - 2017-10-20
 ### Added

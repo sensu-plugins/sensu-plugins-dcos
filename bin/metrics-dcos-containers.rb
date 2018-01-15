@@ -93,20 +93,20 @@ class DCOSMetrics < Sensu::Plugin::Metric::CLI::Graphite
          long: '--dimensions DIMENSIONS',
          required: false
 
-  def frameworks
+  def mesos_frameworks
     # Return the memoized result if exists. This will ensure that the mesos
     # state endpoint will be called only once and when needed and return the
     # cached result immediately for subsequent calls.
-    return @frameworks if @frameworks
+    return @mesos_frameworks if @mesos_frameworks
     agent_ip = `#{config[:agent_ip_discovery_command]}`
-    state = get_data("http://#{agent_ip}:#{config[:agent_port]}/slave(1)/state")
-    @frameworks = {}
+    state = get_data("http://#{agent_ip}:#{config[:agent_port]}/state")
+    @mesos_frameworks = {}
     %w[frameworks completed_frameworks].each do |fw_key|
       state[fw_key].each do |framework|
-        @frameworks[framework['id']] = framework['name']
+        @mesos_frameworks[framework['id']] = framework['name']
       end
     end
-    @frameworks
+    @mesos_frameworks
   end
 
   def get_extra_tags(dimensions)
@@ -118,7 +118,7 @@ class DCOSMetrics < Sensu::Plugin::Metric::CLI::Graphite
       # available, see https://jira.mesosphere.com/browse/DCOS_OSS-2043 for
       # upstream issue.
       if d == 'framework_name' && !dimensions.key?('framework_name')
-        extra_tags.push(frameworks[dimensions['framework_id']])
+        extra_tags.push(mesos_frameworks[dimensions['framework_id']])
       else
         extra_tags.push(dimensions[d])
       end
