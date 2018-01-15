@@ -28,3 +28,8 @@ RegexpLiteral:
 
 Style/Documentation:
   Enabled: false
+
+Style/SafeNavigation:
+  # this should be re-evaluated once we we drop ruby support for 2.1 and 2.2
+  # as this feature was introduced in ruby 2.3
+  Enabled: false
