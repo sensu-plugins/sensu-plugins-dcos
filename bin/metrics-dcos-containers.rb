@@ -69,6 +69,18 @@ class DCOSMetrics < Sensu::Plugin::Metric::CLI::Graphite
          required: false,
          default: '61001'
 
+  option :agent_ip_discovery_command,
+         description: 'DCOS agent ip discovery command',
+         long: '--agent-ip-discovery-command COMMAND',
+         required: false,
+         default: '/opt/mesosphere/bin/detect_ip'
+
+  option :agent_port,
+         description: 'DCOS agent port',
+         long: '--agent-port PORT',
+         required: false,
+         default: '5051'
+
   option :uri,
          description: 'Endpoint URI',
          short: '-u URI',
@@ -81,19 +93,47 @@ class DCOSMetrics < Sensu::Plugin::Metric::CLI::Graphite
          long: '--dimensions DIMENSIONS',
          required: false
 
+  def mesos_frameworks
+    # Return the memoized result if exists. This will ensure that the mesos
+    # state endpoint will be called only once and when needed and return the
+    # cached result immediately for subsequent calls.
+    return @mesos_frameworks if @mesos_frameworks
+    agent_ip = `#{config[:agent_ip_discovery_command]}`
+    state = get_data("http://#{agent_ip}:#{config[:agent_port]}/state")
+    @mesos_frameworks = {}
+    %w[frameworks completed_frameworks].each do |fw_key|
+      state[fw_key].each do |framework|
+        @mesos_frameworks[framework['id']] = framework['name']
+      end
+    end
+    @mesos_frameworks
+  end
+
+  def get_extra_tags(dimensions)
+    extra_tags = []
+    return extra_tags unless config[:dimensions]
+    config[:dimensions].tr(' ', '').split(',').each do |d|
+      # Special case for app metrics, framework_name dimension does not exist
+      # in app metrics and in some cases app metrics/dimensions are not
+      # available, see https://jira.mesosphere.com/browse/DCOS_OSS-2043 for
+      # upstream issue.
+      if d == 'framework_name' && !dimensions.key?('framework_name')
+        extra_tags.push(mesos_frameworks[dimensions['framework_id']])
+      else
+        extra_tags.push(dimensions[d])
+      end
+    end
+    extra_tags
+  end
+
   def run
     containers = get_data("http://#{config[:server]}:#{config[:port]}#{config[:uri]}")
     unless containers.nil? || containers.empty?
-      containers.each do |container| # rubocop:disable Metrics/BlockLength
-        all_metrics = get_data("http://#{config[:server]}:#{config[:port]}#{config[:uri]}/#{container}")
-        if config[:dimensions]
-          extra_tags = []
-          config[:dimensions].tr(' ', '').split(',').each do |d|
-            extra_tags.push(all_metrics['dimensions'][d]) if all_metrics['dimensions'][d]
-          end
-        end
-        if all_metrics.key?('datapoints')
-          all_metrics['datapoints'].each do |metric|
+      containers.each do |container|
+        container_metrics = get_data("http://#{config[:server]}:#{config[:port]}#{config[:uri]}/#{container}")
+        if container_metrics.key?('datapoints')
+          extra_tags = get_extra_tags(container_metrics['dimensions'])
+          container_metrics['datapoints'].each do |metric|
             metric['name'].tr!('/', '.')
             metric['name'].squeeze!('.')
             output([config[:scheme], extra_tags, container, metric['unit'], metric['name']].compact.join('.'), metric['value'])
@@ -101,6 +141,10 @@ class DCOSMetrics < Sensu::Plugin::Metric::CLI::Graphite
         end
         app_metrics = get_data("http://#{config[:server]}:#{config[:port]}#{config[:uri]}/#{container}/app")
         next if app_metrics['datapoints'].nil?
+        app_dimensions = app_metrics['dimensions']
+        # merge container dimensions into app dimensions since app dimensions does have less
+        app_dimensions = container_metrics['dimensions'].merge(app_dimensions) if container_metrics.key?('dimensions')
+        extra_tags = get_extra_tags(app_dimensions)
         app_metrics['datapoints'].each do |metric|
           unless metric['tags'].nil?
             metric['tags'].each do |k, v|
