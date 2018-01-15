@@ -5,6 +5,8 @@ This CHANGELOG follows the format listed at [Our CHANGELOG Guidelines ](https://
 Which is based on [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
+
+## [0.4.1] - 2018-01-15
 ### Fixed
 - fixed the handling of empty container metrics issue from dcos-metrics
 
@@ -67,7 +69,8 @@ Which is based on [Keep A Changelog](http://keepachangelog.com/)
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.4.0...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.4.1...HEAD
+[0.4.1]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.4.0...0.4.1
 [0.4.0]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.2.1...0.3.0
 [0.2.1]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.1.1...0.2.1
