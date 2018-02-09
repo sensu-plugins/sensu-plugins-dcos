@@ -5,6 +5,8 @@ This CHANGELOG follows the format listed at [Our CHANGELOG Guidelines ](https://
 Which is based on [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
+### Added
+- `check-dcos-jobs-health.rb`: do a convertion of minute to float, add a minimum threshold (@mgatien)
 
 ## [0.4.1] - 2018-01-15
 ### Fixed
