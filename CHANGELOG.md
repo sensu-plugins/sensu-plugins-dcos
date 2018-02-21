@@ -6,6 +6,7 @@ Which is based on [Keep A Changelog](http://keepachangelog.com/)
 
 ## [Unreleased]
 
+## [0.4.2] - 2018-02-20
 ### Security
 - updated rubocop dependency to `~> 0.51.0` per: https://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2017-8418. (@majormoses)
 
@@ -75,7 +76,8 @@ Which is based on [Keep A Changelog](http://keepachangelog.com/)
 ### Added
 - Initial release
 
-[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.4.1...HEAD
+[Unreleased]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.4.2...HEAD
+[0.4.2]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.4.1...0.4.2
 [0.4.1]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.4.0...0.4.1
 [0.4.0]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.3.0...0.4.0
 [0.3.0]: https://github.com/sensu-plugins/sensu-plugins-dcos/compare/0.2.1...0.3.0
